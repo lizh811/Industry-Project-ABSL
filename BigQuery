@@ -1,0 +1,18 @@
+select
+  a1.user_id,
+  a1.event_name,
+  a1.timestamp,
+  datetime(timestamp, 'Pacific/Auckland') as NZ_Time,
+  a2.club_id,
+  json_extract_scalar(data, "$.properties['$browser']") as Browser,
+  json_extract_scalar(data, "$.properties['$region']") as Region,
+  json_extract_scalar(data, "$.properties['$city']") as City,
+  json_extract_scalar(data, "$.properties['$os']") as OS,
+  json_extract_scalar(data, "$.properties['Event Type']") as TaggedType,
+  json_extract_scalar(data, "$.properties['mp_country_code']") as Country_Code
+from `glory-league-a79d0.students_pg_1.mixpanel_events` a1
+JOIN `glory-league-a79d0.students_pg_1.people` a2
+ON a1.user_id =a2.user_id
+WHERE a2.club_id = 25
+order by user_id desc
+
